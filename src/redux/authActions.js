@@ -1,92 +1,35 @@
+import Axios from "axios";
+import Cookie from 'js-cookie';
 import {
-    LOGIN_SUCCESS,
-    LOGIN_FAIL,
-    REGISTER_SUCCESS,
-    REGISTER_FAIL
-  } from './ActionTypes';
-  import {returnErrors} from "./errorActions";
+  USER_SIGNIN_REQUEST, USER_SIGNIN_SUCCESS,
+  USER_SIGNIN_FAIL, USER_REGISTER_REQUEST,
+  USER_REGISTER_SUCCESS, USER_REGISTER_FAIL, USER_LOGOUT
+} from "./ActionTypes";
 
-  export const register = (username, email, password ) => (dispatch) => {
-    const newUser = {
-        username: username,
-        email: email,
-        password: password
-    };
-    return fetch("http://localhost:3001/auth/signup", {
-        method: "POST",
-        body: JSON.stringify(newUser),
-        headers: {
-          "Content-Type": "application/json"
-        }
-    })
-    .then(response => {
-      if (response.ok) {
-        return response;
-      } else {
-        var error = new Error('Error ' + response.status + ': ' + response.statusText);
-        error.response = response;
-        throw error;
-      }
-    },
-    error => {
-          throw error;
-    })
-  .then(response => response.json())
-      .then(response =>
-        dispatch({
-          type: REGISTER_SUCCESS,
-          payload: response
-        })
-      )
-      .catch(err => {
-        dispatch(
-          returnErrors(err.response, err.response, 'REGISTER_FAIL')
-        );
-        dispatch({
-          type: REGISTER_FAIL
-        });
-      });
-  };
+const signin = (email, password) => async (dispatch) => {
+  dispatch({ type: USER_SIGNIN_REQUEST, payload: { email, password } });
+  try {
+    const { data } = await Axios.post("http://localhost:3001/auth/login", { email, password });
+    dispatch({ type: USER_SIGNIN_SUCCESS, payload: data });
+    Cookie.set('userInfo', JSON.stringify(data));
+  } catch (error) {
+    dispatch({ type: USER_SIGNIN_FAIL, payload: error.message });
+  }
+}
 
-export const login = ( email, password ) => (dispatch) => {
+const register = (name, email, password) => async (dispatch) => {
+  dispatch({ type: USER_REGISTER_REQUEST, payload: { name, email, password } });
+  try {
+    const { data } = await Axios.post("http://localhost:3001/auth/signup", { name, email, password });
+    dispatch({ type: USER_REGISTER_SUCCESS, payload: data });
+    Cookie.set('userInfo', JSON.stringify(data));
+  } catch (error) {
+    dispatch({ type: USER_REGISTER_FAIL, payload: error.message });
+  }
+}
 
-    const UserExist = {
-        email: email,
-        password: password
-    };
-    
-    return fetch("http://localhost:3001/auth/login", {
-        method: "POST",
-        body: JSON.stringify(UserExist),
-        headers: {
-          "Content-Type": "application/json"
-        }
-    })
-    .then(response => {
-      if (response.ok) {
-        return response;
-      } else {
-        var error = new Error('Error ' + response.status + ': ' + response.statusText);
-        error.response = response;
-        throw error;
-      }
-    },
-    error => {
-          throw error;
-    })
-  .then(response => response.json())
-      .then(response =>
-        dispatch({
-          type: LOGIN_SUCCESS,
-          payload: response
-        })
-      )
-      .catch(err => {
-        dispatch(
-          returnErrors(err.response.data, err.response.status, 'LOGIN_FAIL')
-        );
-        dispatch({
-          type: LOGIN_FAIL
-        });
-      });
-  };
+const logout = () => (dispatch) => {
+  Cookie.remove("userInfo");
+  dispatch({ type: USER_LOGOUT })
+}
+export { signin, register, logout };

@@ -1,39 +1,30 @@
-import {
-    AUTH_ERROR,
-    LOGIN_SUCCESS,
-    LOGIN_FAIL,
-    LOGOUT_SUCCESS,
-    REGISTER_SUCCESS,
-    REGISTER_FAIL
-  } from './ActionTypes';
-  
-  const initialState = {
-    token: null,
-    isAuthenticated: null,
-    user: null
-  };
-  
-  export default function(state = initialState, action) {
-    switch (action.type) {
-      case LOGIN_SUCCESS:
-      case REGISTER_SUCCESS:
-        return {
-          ...state,
-          user: action.payload,
-          token:action.payload.token,
-          isAuthenticated: true
-        };
-      case AUTH_ERROR:
-      case LOGIN_FAIL:
-      case LOGOUT_SUCCESS:
-      case REGISTER_FAIL:
-        return {
-          ...state,
-          token: null,
-          user: null,
-          isAuthenticated: false
-        };
-      default:
-        return state;
-    }
+import { USER_SIGNIN_REQUEST, USER_SIGNIN_SUCCESS, USER_SIGNIN_FAIL, USER_REGISTER_REQUEST, USER_REGISTER_SUCCESS, USER_REGISTER_FAIL, USER_LOGOUT} from "./ActionTypes";
+
+function userSigninReducer(state = {}, action) {
+  switch (action.type) {
+    case USER_SIGNIN_REQUEST:
+      return { loading: true };
+    case USER_SIGNIN_SUCCESS:
+      return { loading: false, userInfo: action.payload };
+    case USER_SIGNIN_FAIL:
+      return { loading: false, error: action.payload };
+    case USER_LOGOUT:
+      return {userInfo: null};
+    default: return state;
   }
+}
+
+function userRegisterReducer(state = {}, action) {
+  switch (action.type) {
+    case USER_REGISTER_REQUEST:
+      return { loading: true };
+    case USER_REGISTER_SUCCESS:
+      return { loading: false, userInfo: action.payload };
+    case USER_REGISTER_FAIL:
+      return { loading: false, error: action.payload };
+    default: return state;
+  }
+}
+export {
+  userSigninReducer, userRegisterReducer
+}

@@ -4,6 +4,11 @@ import {
   } from './ActionTypes';
   
   const initialState = {
+    // title:null,
+    // description:null,
+    // category:null,
+    // image:null,
+    // price:null,
     products: [],
     loading: false
   };
@@ -15,6 +20,11 @@ import {
         return {
           ...state,
           products: [action.payload, ...state.products],
+          // title:action.payload.title,
+          // description:action.payload.description,
+          // category:action.payload.description,
+          // image:action.payload.image,
+          // price:action.payload.price,
           loading: false
         };
       case DELETE_ITEM:

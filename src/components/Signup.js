@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, {useEffect,useState } from 'react';
 import {
   Button,
   Modal,
@@ -10,74 +10,60 @@ import {
   Input,
   Alert
 } from 'reactstrap';
-import { connect } from 'react-redux';
+import { connect,useSelector,useDispatch } from 'react-redux';
 import PropTypes from 'prop-types';
 import { register } from '../redux/authActions';
 import { clearErrors } from '../redux/errorActions';
+import { Redirect } from 'react-router-dom';
 
-class Signup extends Component {
-  
-    state={
-        modal: false,
-        username: "",
-        email: "",
-        password:"",
-        msg: null
+function Signup (props) {
+
+  const [modal, setModal] = useState(false);
+  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const userRegister = useSelector(state => state.userRegister);
+  const { userInfo } = userRegister;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (userInfo) {
+      redirect();
     }
+    return () => {
+      //
+    };
+  }, [userInfo]);
 
-    static propTypes = {
-        isAuthenticated: PropTypes.bool,
-        token: PropTypes.element,
-        error: PropTypes.object.isRequired,
-        register: PropTypes.func.isRequired
-    }
 
-    componentDidUpdate(prevProps) {
-        const {error} = this.props;
-        if(error !== prevProps.error) {
-            if(error.id === "REGISTER_FAIL"){
-                this.setState({msg: error.msg.msg});
-            } else {
-                this.setState({msg: null})
-            }
-        }
-    }
-
-  toggle = () => {
-      this.setState({
-          modal: !this.state.modal
-      })
+  const redirect = ()=> {
+    return (
+      <div>
+      <Redirect to={"/products"}/>
+      </div>
+    )
   }
 
-  onChange = e => {
-      this.setState({ [e.target.name]: e.target.value})
+  const toggle = () => {
+      setModal(!modal);
   }
 
-  onSubmit = e => {
+  const onSubmit = e => {
       e.preventDefault();
-    
-      const {username, email, password} = this.state;
-
-      const newUser = {
-          username, email, password
-      };
-
-      this.props.register(newUser);
-
+      dispatch(register(username, email, password));
   }
 
-  render(){
+  
       return (
     <div>
-      <Button outline onClick={this.toggle} href="#">
+      <Button outline onClick={toggle} href="#">
         Register
       </Button>
 
-      <Modal isOpen={this.state.modal} toggle={this.toggle}>
-        <ModalHeader toggle={this.toggle}>Register</ModalHeader>
+      <Modal isOpen={modal} toggle={toggle}>
+        <ModalHeader toggle={toggle}>Register</ModalHeader>
         <ModalBody>
-        {this.state.msg ? <Alert color="danger">{this.state.msg}</Alert> : null}
-          <Form onSubmit={this.onSubmit}>
+           <Form onSubmit={onSubmit}>
             <FormGroup>
               <Label for="username">Name</Label>
               <Input
@@ -86,7 +72,7 @@ class Signup extends Component {
                 id="username"
                 placeholder="Username"
                 className="mb-3"
-                onChange={this.onChange}
+                onChange={(e) => setUsername(e.target.value)}
               />
 
               <Label for="email">Email</Label>
@@ -96,7 +82,7 @@ class Signup extends Component {
                 id="email"
                 placeholder="Email"
                 className="mb-3"
-                onChange={this.onChange}
+                onChange={(e) => setEmail(e.target.value)}
               />
 
               <Label for="password">Password</Label>
@@ -106,7 +92,7 @@ class Signup extends Component {
                 id="password"
                 placeholder="Password"
                 className="mb-3"
-                onChange={this.onChange}
+                onChange={(e) => setPassword(e.target.value)}
               />
               <Button color="dark" style={{ marginTop: '2rem' }} block>
                 Register
@@ -117,17 +103,7 @@ class Signup extends Component {
       </Modal>
      </div>
       )
-  }
 }
 
-
-const mapStateToProps = (state) => ({
-  isAuthenticated: state.auth.isAuthenticated,
-  token: state.auth.token,
-  error: state.error
-});
-
-export default connect(mapStateToProps, { register, clearErrors })(
-  Signup
-);
+export default Signup;
 

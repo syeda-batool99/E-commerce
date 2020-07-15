@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect  } from "react";
 import {
   Collapse,
   Navbar,
@@ -6,23 +6,40 @@ import {
   NavbarBrand,
   Nav,
   NavItem,
-  Container
+  Container,
+  Button
 } from "reactstrap";
-import { NavLink} from "react-router-dom";
+import { NavLink, Redirect} from "react-router-dom";
 import Logo from "../images/logo.png";
 import Signin from './Signin';
 import Signup from './Signup';
+import {logout} from "../redux/authActions";
+import { useDispatch } from 'react-redux';
 
-class Header extends Component {
-  state = {
-    isOpen: false,
+
+function Header (props) {
+
+  const [isOpen, setOpen] = useState(false);;
+  const dispatch = useDispatch();
+  
+
+  const handleLogout = () => {
+  dispatch(logout());
+  redirect()
+}
+
+const redirect = ()=> {
+  return (
+    <div>
+    <Redirect to={"/"}/>
+    </div>
+  )
+}
+  const toggle = () => {
+    setOpen(!isOpen);
   };
 
-  toggle = () => {
-    this.setState({ isOpen: !this.state.isOpen });
-  };
-
-  render() {
+    const token = props.isLogged;
     return (
       <div>
         <Navbar expand="md">
@@ -32,8 +49,8 @@ class Header extends Component {
                 <img src={Logo} alt="" width="150" height="100" />
               </h1>
             </NavbarBrand>
-            <NavbarToggler onClick={this.toggle} style={{backgroundColor:"gray"}} />
-            <Collapse isOpen={this.state.isOpen} navbar>
+            <NavbarToggler onClick={toggle} style={{backgroundColor:"gray"}} />
+            <Collapse isOpen={isOpen} navbar>
               <Nav navbar>
                 <NavItem>
                   <NavLink
@@ -75,10 +92,20 @@ class Header extends Component {
                     Mouse Pad
                   </NavLink>
                 </NavItem>
+                
                 <Nav className="ml-5" navbar>
-                <NavItem>  <Signin/> </NavItem>
+                {token ? (
+                  <>
+              <NavItem style={{ color: "white" }}>{token.name}</NavItem>
+              <NavItem style={{ color: "white" }}> <Button onClick={handleLogout}>Sign Out</Button> </NavItem>
+              </>
+            ) : (
+              <>
+              <NavItem>  <Signin/> </NavItem>
                 &nbsp; &nbsp;
                 <NavItem>  <Signup/>  </NavItem>
+                </>
+            )}
                 </Nav>
               </Nav>
             </Collapse>
@@ -86,7 +113,6 @@ class Header extends Component {
         </Navbar>
       </div>
     );
-  }
 }
 
 export default Header;

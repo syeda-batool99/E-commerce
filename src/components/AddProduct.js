@@ -13,14 +13,16 @@ import { connect } from "react-redux";
 import { addItem } from "../redux/productActions";
 
 class AddProduct extends Component {
-  state = {
-    modal: false,
-    title: "",
-    description: "",
-    category: "",
-    image: "",
-    price: "",
-  };
+        state = {
+            modal: false,
+            title: "",
+            description: "",
+            category: "",
+            image: "",
+            price: "",
+          };
+
+  
 
   toggle = () => {
     this.setState({
@@ -40,8 +42,8 @@ class AddProduct extends Component {
     formData.append('title', this.state.title);
     formData.append('description', this.state.description);
     formData.append('category', this.state.category);
-    formData.append('image', this.state.image);
     formData.append('price', this.state.price);
+    formData.append('image', this.state.image);
     console.log("HELLO" + formData)
     this.props.addItem(formData);
     
@@ -57,7 +59,7 @@ class AddProduct extends Component {
         <Modal isOpen={this.state.modal} toggle={this.toggle}>
           <ModalHeader toggle={this.toggle}>Add a new Product</ModalHeader>
           <ModalBody>
-            <Form onSubmit={this.onSubmit}>
+            <Form onSubmit={this.onSubmit} encType="multipart/form-data">
               <FormGroup>
                 <Label for="title"> Title </Label>
                 <Input

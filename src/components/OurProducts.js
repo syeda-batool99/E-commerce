@@ -22,22 +22,28 @@ class OurProducts extends Component {
                 <Container> 
                 <AddProduct/>
                 </Container>
+                <div className="container">
+                <div className="row">
                 {products.map((p,i) => {
                     return(
-                        <div key={i} className="container">
-                        <div className="card mb-2 mt-4 col-6 col-md-12" >
+                        
+                        <div className="card mb-2 mt-4 col-4" key={i} style={{backgroundColor:"black"}}>
                         <div className="card-body" style={{backgroundColor:"black"}} >
-                            <img alt="ProductImage" src={`http://localhost:3001/static/img/${p.imageName}`} style={{height:"150px", width:"180px"}}></img>
+                            
                         <h5 className="card-title" style={{color:"white"}}>Title: {p.title}</h5>
                         <p className="card-text" style={{color:"white"}}>Description: {p.description}</p>
+                        <hr style={{backgroundColor: "aqua"}}/>
                         <p className="card-text" style={{color:"white"}}>Rs. {p.price}</p>
+                        <img alt="ProductImage" src={`http://localhost:3001/static/img/${p.imageName}`} style={{height:"150px", width:"180px"}}></img>
+                        <br/> <br/>
                         <button className="btn btn-danger"
                         onClick={this.onDeleteClick.bind(this, p.id)}>Delete</button>
                         </div>
                       </div>
-                      </div>
                     )
                 })}
+                </div>
+                </div>
                 
             </div>
         )
