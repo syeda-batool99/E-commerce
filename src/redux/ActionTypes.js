@@ -8,6 +8,9 @@ export const DELETE_ITEM = "DELETE_ITEM";
 export const GET_MOUSE = 'GET_MOUSE';
 export const MOUSE_LOADING = 'MOUSE_LOADING';
 
+export const GET_MOUSEPAD = 'GET_MOUSEPAD';
+export const MOUSEPAD_LOADING = 'MOUSEPAD_LOADING';
+
 export const GET_KEYBOARD = 'GET_KEYBOARD';
 export const KEYBOARD_LOADING = 'KEYBOARD_LOADING';
 

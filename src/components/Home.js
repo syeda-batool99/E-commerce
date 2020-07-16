@@ -2,6 +2,7 @@ import React from "react";
 import Pic1 from "../images/Pic1.png";
 import Pic2 from "../images/Pic2.png";
 import Pic3 from "../images/Pic3.png";
+import Footer from "./Footer"
 
 const Home = () => (
   <div>
@@ -36,6 +37,7 @@ const Home = () => (
       </div>
     </div>
     <hr style={{backgroundColor: "aqua"}}/>
+    <Footer/> 
   </div>
 );
 

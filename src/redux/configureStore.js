@@ -9,6 +9,7 @@ import {
   } from './authReducer';
 import productReducer from "./productReducer";
 import mouseReducer from "./mouseReducer";
+import mousepadReducer from "./mousepadReducer";
 import keyboardReducer from "./keyboardReducer";
 
 const userInfo = Cookie.getJSON('userInfo') || null;
@@ -23,7 +24,8 @@ const reducer = combineReducers({
     error: errorReducer,
     product: productReducer,
     mouse: mouseReducer,
-    keyboard: keyboardReducer
+    keyboard: keyboardReducer,
+    mousepad: mousepadReducer,
 })
 
 export const ConfigureStore = () => {

@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {getKeyboard} from "../redux/keyboardActions";
 import PropTypes from "prop-types"
-import { Container } from 'reactstrap';
+import { Jumbotron } from 'reactstrap';
+import Footer from "./Footer"
+import Loading from "./Loading";
 
 class Keyboard extends Component {
     
@@ -15,6 +17,8 @@ class Keyboard extends Component {
         return(
             <div>
                 <div className="container">
+                    <Jumbotron ><h1 className="text-center">Keyboards</h1></Jumbotron>
+                {(keyboard.length == 0) ? <Loading/> : <>
                 <div className="row">
                 {keyboard.map((k,i) => {
                     return(
@@ -32,8 +36,9 @@ class Keyboard extends Component {
                     )
                 })}
                 </div>
+                </>}
                 </div>
-                
+                <Footer/> 
             </div>
         )
     }

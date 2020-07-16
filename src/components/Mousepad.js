@@ -1,26 +1,26 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {getMouse} from "../redux/mouseActions";
+import {getMousepad} from "../redux/mousepadActions";
 import PropTypes from "prop-types"
 import { Jumbotron } from 'reactstrap';
 import Footer from "./Footer"
 import Loading from "./Loading"
 
-class Mouse extends Component {
+class Mousepad extends Component {
     
     componentDidMount(){
-        this.props.getMouse();
+        this.props.getMousepad();
     }
 
     render(){
-        const {mouse} = this.props.mouse;
+        const {mousepad} = this.props.mousepad;
         return(
             <div>
                 <div className="container">
-                <Jumbotron ><h1 className="text-center">Mouse</h1></Jumbotron>
-                {(mouse.length == 0) ? <Loading/> : <>
+                <Jumbotron ><h1 className="text-center">Mouse Pads</h1></Jumbotron>
+                {(mousepad.length == 0) ? <Loading/> : <>
                 <div className="row">
-                {mouse.map((m,i) => {
+                {mousepad.map((m,i) => {
                     return(
                         <div className="card mb-2 mt-4 col-4" key={i} style={{backgroundColor:"black"}}>
                         <div className="card-body" style={{backgroundColor:"black"}} >
@@ -44,13 +44,13 @@ class Mouse extends Component {
     }
 }
 
-Mouse.propTypes = {
-    getMouse: PropTypes.func.isRequired,
-    mouse: PropTypes.object.isRequired
+Mousepad.propTypes = {
+    getMousepad: PropTypes.func.isRequired,
+    mousepad: PropTypes.object.isRequired
 }
 
 const mapStateToProps = (state) => ({
-    mouse: state.mouse
+    mousepad: state.mousepad
 })
 
-export default connect(mapStateToProps, {getMouse})(Mouse);
+export default connect(mapStateToProps, {getMousepad})(Mousepad);

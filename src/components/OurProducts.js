@@ -3,7 +3,9 @@ import {connect} from "react-redux";
 import {getItems, deleteItem} from "../redux/productActions";
 import PropTypes from "prop-types"
 import AddProduct from './AddProduct';
-import { Container } from 'reactstrap';
+import { Container, Jumbotron } from 'reactstrap';
+import Footer from "./Footer"
+import Loading from "./Loading"
 
 class OurProducts extends Component {
     
@@ -22,7 +24,9 @@ class OurProducts extends Component {
                 <Container> 
                 <AddProduct/>
                 </Container>
-                <div className="container">
+                <div className="container mt-3">
+                <Jumbotron ><h1 className="text-center">All Products</h1></Jumbotron>
+                    {(products.length == 0) ? <Loading/> : <>
                 <div className="row">
                 {products.map((p,i) => {
                     return(
@@ -43,8 +47,9 @@ class OurProducts extends Component {
                     )
                 })}
                 </div>
+                </>}
                 </div>
-                
+                <Footer/> 
             </div>
         )
     }

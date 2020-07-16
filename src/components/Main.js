@@ -7,8 +7,9 @@ import Signup from "./Signup";
 import OurProducts from "./OurProducts";
 import Mouse from "./Mouse";
 import Keyboard from "./Keyboard";
-import Footer from "./Footer"
+
 import { useSelector } from "react-redux";
+import Mousepad from "./Mousepad";
 
 
 
@@ -29,8 +30,9 @@ function Main() {
           <Route exact path='/products' component={OurProducts}/>
           <Route exact path='/mouse' component={Mouse}/>
           <Route exact path='/keyboard' component={Keyboard}/>
+          <Route exact path='/mousepad' component={Mousepad}/>
         </Switch>
-       <Footer/> 
+       
       </div>
       </BrowserRouter>
     );
