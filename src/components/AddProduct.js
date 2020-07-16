@@ -38,14 +38,16 @@ class AddProduct extends Component {
   onSubmit = (e) => {
     e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('title', this.state.title);
-    formData.append('description', this.state.description);
-    formData.append('category', this.state.category);
-    formData.append('price', this.state.price);
-    formData.append('image', this.state.image);
-    console.log("HELLO" + formData)
-    this.props.addItem(formData);
+    const obj = {
+      title : this.state.title,
+      description : this.state.description,
+      category : this.state.category,
+      price : this.state.price,
+      image : this.state.image
+    }
+    
+    console.log("HELLO" + obj)
+    this.props.addItem(obj);
     
     this.toggle();
   };

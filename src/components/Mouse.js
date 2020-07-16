@@ -18,7 +18,7 @@ class Mouse extends Component {
             <div>
                 <div className="container">
                 <Jumbotron ><h1 className="text-center">Mouse</h1></Jumbotron>
-                {(mouse.length == 0) ? <Loading/> : <>
+                {(mouse.length === 0) ? <Loading/> : <>
                 <div className="row">
                 {mouse.map((m,i) => {
                     return(

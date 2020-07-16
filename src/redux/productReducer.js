@@ -4,11 +4,6 @@ import {
   } from './ActionTypes';
   
   const initialState = {
-    // title:null,
-    // description:null,
-    // category:null,
-    // image:null,
-    // price:null,
     products: [],
     loading: false
   };

@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { Component } from 'react';
 import {
-  Button,
+  Button, 
   Modal,
   ModalHeader,
   ModalBody,
@@ -9,59 +9,56 @@ import {
   Label,
   Input
 } from 'reactstrap';
-import {useDispatch, useSelector} from 'react-redux';
-import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import { signin } from '../redux/authActions';
-import { clearErrors } from '../redux/errorActions';
 import { Redirect } from 'react-router-dom';
+import PropTypes from "prop-types"
 
-function Signin(props) {
+class Signin extends Component {
   
-  const [email, setEmail] = useState('');
-  const [modal, setModal] = useState(false);
-  const [password, setPassword] = useState('');
-  const userSignin = useSelector(state => state.userSignin);
-  const {userInfo} = userSignin;
-  const dispatch = useDispatch();
+ state={
+   modal: false,
+   email:"",
+   password:"",
+   redirect: false,
+ }
   
-  useEffect(() => {
-    if (userInfo) {
-      redirect();
-    }
-    return () => {
-      //
-    };
-  }, [userInfo]);
+ toggle = () => {
+  this.setState({
+    modal: !this.state.modal,
+  });
+};
 
-  const redirect = ()=> {
-    return (
-      <div>
+onChange = (name) => (e) => {
+  const value = name === "image" ? e.target.files[0] : e.target.value;
+  this.setState({ [name]: value });
+};
+
+onSubmit = (e) => {
+  e.preventDefault();
+  
+  this.props.signin(this.state.email, this.state.password);
+  this.toggle();
+  this.setState({redirect: true})
+  console.log(this.state.email);
+};
+
+  render(){
+    if(this.state.redirect){
+      return(
       <Redirect to={"/products"}/>
-      </div>
-    )
-  }
-
-  const toggle = () => {
-    setModal(!modal);
-}
-
-  const onSubmit = e => {
-      e.preventDefault();
-      dispatch(signin(email, password));
-      
-  }
-
-  
+      )
+    }
       return (
     <div>
-      <Button  outline onClick={toggle}>
+      <Button  outline onClick={this.toggle}>
         Login
       </Button>
 
-      <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Login</ModalHeader>
+      <Modal isOpen={this.state.modal} toggle={this.toggle}>
+        <ModalHeader toggle={this.toggle}>Login</ModalHeader>
         <ModalBody>
-          <Form onSubmit={onSubmit}>
+          <Form onSubmit={this.onSubmit}>
             <FormGroup>
               <Label for="email">Email</Label>
               <Input
@@ -70,7 +67,7 @@ function Signin(props) {
                 id="email"
                 placeholder="Email"
                 className="mb-3"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={this.onChange("email")}
               />
 
               <Label for="password">Password</Label>
@@ -80,7 +77,7 @@ function Signin(props) {
                 id="password"
                 placeholder="Password"
                 className="mb-3"
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={this.onChange("password")}
               />
               <Button color="dark" style={{ marginTop: '2rem' }} block>
                 Login
@@ -90,8 +87,18 @@ function Signin(props) {
         </ModalBody>
       </Modal>
      </div>
-      )
+ )
+}
 }
 
-export default Signin;
+Signin.propTypes = {
+  signin: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps, { signin })(Signin);
 

@@ -18,7 +18,7 @@ class Mousepad extends Component {
             <div>
                 <div className="container">
                 <Jumbotron ><h1 className="text-center">Mouse Pads</h1></Jumbotron>
-                {(mousepad.length == 0) ? <Loading/> : <>
+                {(mousepad.length === 0) ? <Loading/> : <>
                 <div className="row">
                 {mousepad.map((m,i) => {
                     return(

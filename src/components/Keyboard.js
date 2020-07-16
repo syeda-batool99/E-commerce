@@ -18,7 +18,7 @@ class Keyboard extends Component {
             <div>
                 <div className="container">
                     <Jumbotron ><h1 className="text-center">Keyboards</h1></Jumbotron>
-                {(keyboard.length == 0) ? <Loading/> : <>
+                {(keyboard.length === 0) ? <Loading/> : <>
                 <div className="row">
                 {keyboard.map((k,i) => {
                     return(

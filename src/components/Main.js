@@ -15,17 +15,13 @@ import Mousepad from "./Mousepad";
 
 function Main() {
 
-  const userSignin = useSelector((state) => state.userSignin);
-  const { userInfo } = userSignin;
-
-
     return (
       <BrowserRouter>
       <div>
-        <Header isLogged={userInfo}/>
+        <Header />
         <Switch >
           <Route exact path="/" component={Home} />
-          <Route exact path="/signup" component={Signup}/>
+          {/* <Route exact path="/signup" component={Signup}/> */}
           <Route exact path="/signin" component={Signin}/>
           <Route exact path='/products' component={OurProducts}/>
           <Route exact path='/mouse' component={Mouse}/>

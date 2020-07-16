@@ -1,4 +1,4 @@
-import React, { useState, useEffect  } from "react";
+import React, { Component  } from "react";
 import {
   Collapse,
   Navbar,
@@ -14,32 +14,29 @@ import Logo from "../images/logo.png";
 import Signin from './Signin';
 import Signup from './Signup';
 import {logout} from "../redux/authActions";
-import { useDispatch } from 'react-redux';
+import PropTypes from "prop-types"
+import { connect } from 'react-redux';
 
 
-function Header (props) {
+class Header extends Component {
 
-  const [isOpen, setOpen] = useState(false);;
-  const dispatch = useDispatch();
+  state={
+    isOpen:false,
+    redirect: false
+  }
   
 
-  const handleLogout = () => {
-  dispatch(logout());
-  redirect()
+  handleLogout = () => {
+    this.props.logout()
+  this.setState({redirect: true})
 }
 
-const redirect = ()=> {
-  return (
-    <div>
-    <Redirect to={"/"}/>
-    </div>
-  )
-}
-  const toggle = () => {
-    setOpen(!isOpen);
+  toggle = () => {
+    this.setState({isOpen: true})
   };
 
-    const token = props.isLogged;
+  render(){
+    const details = this.props.user;
     return (
       <div>
         <Navbar expand="md">
@@ -49,8 +46,8 @@ const redirect = ()=> {
                 <img src={Logo} alt="" width="150" height="100" />
               </h1>
             </NavbarBrand>
-            <NavbarToggler onClick={toggle} style={{backgroundColor:"gray"}} />
-            <Collapse isOpen={isOpen} navbar>
+            <NavbarToggler onClick={this.toggle} style={{backgroundColor:"gray"}} />
+            <Collapse isOpen={this.state.isOpen} navbar>
               <Nav navbar>
                 <NavItem>
                   <NavLink
@@ -94,25 +91,28 @@ const redirect = ()=> {
                 </NavItem>
                 
                 <Nav className="ml-5" navbar>
-                {token ? (
-                  <>
-              <NavItem style={{ color: "white" }}>{token.name}</NavItem>
-              <NavItem style={{ color: "white" }}> <Button onClick={handleLogout}>Sign Out</Button> </NavItem>
-              </>
-            ) : (
-              <>
-              <NavItem>  <Signin/> </NavItem>
+                {(details) ? <NavItem><Button outline onClick={this.handleLogout}>Logout</Button></NavItem>
+                : <> <NavItem>  <Signin/> </NavItem>
                 &nbsp; &nbsp;
-                <NavItem>  <Signup/>  </NavItem>
-                </>
-            )}
+                <NavItem>  <Signup/> </NavItem> </>}
                 </Nav>
               </Nav>
             </Collapse>
           </Container>
         </Navbar>
+        {(this.state.redirect) ? <Redirect to={"/"}/> : ""}
       </div>
     );
+  }
 }
 
-export default Header;
+Header.propTypes = {
+  user: PropTypes.object,
+}
+
+const mapStateToProps = (state) => ({
+  user: state.user.user
+})
+
+
+export default connect(mapStateToProps, {logout})(Header);

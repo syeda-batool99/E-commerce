@@ -1,78 +1,80 @@
-import React, {useEffect,useState } from 'react';
+import React, { Component } from 'react';
 import {
-  Button,
+  Button, 
   Modal,
   ModalHeader,
   ModalBody,
   Form,
   FormGroup,
   Label,
-  Input,
-  Alert
+  Input
 } from 'reactstrap';
-import { connect,useSelector,useDispatch } from 'react-redux';
-import PropTypes from 'prop-types';
+import {connect} from 'react-redux';
 import { register } from '../redux/authActions';
-import { clearErrors } from '../redux/errorActions';
 import { Redirect } from 'react-router-dom';
+import PropTypes from "prop-types"
 
-function Signup (props) {
-
-  const [modal, setModal] = useState(false);
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const userRegister = useSelector(state => state.userRegister);
-  const { userInfo } = userRegister;
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (userInfo) {
-      redirect();
-    }
-    return () => {
-      //
-    };
-  }, [userInfo]);
-
-
-  const redirect = ()=> {
-    return (
-      <div>
-      <Redirect to={"/products"}/>
-      </div>
-    )
-  }
-
-  const toggle = () => {
-      setModal(!modal);
-  }
-
-  const onSubmit = e => {
-      e.preventDefault();
-      dispatch(register(username, email, password));
-  }
-
+class Signup extends Component {
   
+ state={
+   modal: false,
+   username:"",
+   email:"",
+   password:"",
+   redirect: false,
+ }
+  
+ toggle = () => {
+  this.setState({
+    modal: !this.state.modal,
+  });
+};
+
+onChange = (name) => (e) => {
+  const value = name === "image" ? e.target.files[0] : e.target.value;
+  this.setState({ [name]: value });
+};
+
+onSubmit = (e) => {
+  e.preventDefault();
+
+  const newUser = {
+    username: this.state.username, 
+    email: this.state.email, 
+    password: this.state.password
+  }
+  console.log(newUser);
+  this.props.register(newUser);
+  this.toggle();
+  this.setState({redirect: true})
+  
+};
+
+  render(){
+    if(this.state.redirect){
+      return(
+      <Redirect to={"/products"}/>
+      )
+    }
       return (
     <div>
-      <Button outline onClick={toggle} href="#">
+      <Button  outline onClick={this.toggle}>
         Register
       </Button>
 
-      <Modal isOpen={modal} toggle={toggle}>
-        <ModalHeader toggle={toggle}>Register</ModalHeader>
+      <Modal isOpen={this.state.modal} toggle={this.toggle}>
+        <ModalHeader toggle={this.toggle}>Register</ModalHeader>
         <ModalBody>
-           <Form onSubmit={onSubmit}>
+          <Form onSubmit={this.onSubmit}>
             <FormGroup>
-              <Label for="username">Name</Label>
+            <Label for="username">Username</Label>
               <Input
-                type="text"
+                type="username"
                 name="username"
                 id="username"
                 placeholder="Username"
                 className="mb-3"
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={this.onChange("username")}
               />
 
               <Label for="email">Email</Label>
@@ -82,7 +84,7 @@ function Signup (props) {
                 id="email"
                 placeholder="Email"
                 className="mb-3"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={this.onChange("email")}
               />
 
               <Label for="password">Password</Label>
@@ -92,7 +94,7 @@ function Signup (props) {
                 id="password"
                 placeholder="Password"
                 className="mb-3"
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={this.onChange("password")}
               />
               <Button color="dark" style={{ marginTop: '2rem' }} block>
                 Register
@@ -102,8 +104,18 @@ function Signup (props) {
         </ModalBody>
       </Modal>
      </div>
-      )
+ )
+}
 }
 
-export default Signup;
+Signup.propTypes = {
+  register: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (state) => ({
+  user: state.user,
+});
+
+export default connect(mapStateToProps, { register })(Signup);
 
