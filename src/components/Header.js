@@ -9,7 +9,7 @@ import {
   Container,
   Button
 } from "reactstrap";
-import { NavLink, Redirect} from "react-router-dom";
+import { NavLink, Redirect, withRouter} from "react-router-dom";
 import Logo from "../images/logo.png";
 import Signin from './Signin';
 import Signup from './Signup';
@@ -17,14 +17,31 @@ import {logout} from "../redux/authActions";
 import PropTypes from "prop-types"
 import { connect } from 'react-redux';
 
+const isActive = (history, path) => {
+  if (history.location.pathname === path) {
+      return { color: "aqua" };
+  } else {
+      return { color: "white" };
+  }
+};
 
 class Header extends Component {
 
-  state={
+  constructor(props){
+    super(props)
+  this.state={
     isOpen:false,
     redirect: false
   }
-  
+  }
+
+  isAuthenticated = () => {
+    if (localStorage.getItem('user')) {
+        return JSON.parse(localStorage.getItem('user'));
+    } else {
+        return null;
+    }
+};
 
   handleLogout = () => {
     this.props.logout()
@@ -32,7 +49,7 @@ class Header extends Component {
 }
 
   toggle = () => {
-    this.setState({isOpen: true})
+    this.setState({isOpen: !this.state.isOpen})
   };
 
   render(){
@@ -53,7 +70,7 @@ class Header extends Component {
                   <NavLink
                     className="nav-link  mr-5"
                     to="/products"
-                    style={{ color: "white" }}
+                    style={isActive(this.props.history, "/products")}
                   >
                     {" "}
                     Our Products{" "}
@@ -63,7 +80,7 @@ class Header extends Component {
                   <NavLink
                     className="nav-link mr-5"
                     to="/mouse"
-                    style={{ color: "white" }}
+                    style={isActive(this.props.history, "/mouse")}
                   >
                     {" "}
                     Mouse
@@ -73,7 +90,7 @@ class Header extends Component {
                   <NavLink
                     className="nav-link mr-5"
                     to="/keyboard"
-                    style={{ color: "white" }}
+                    style={isActive(this.props.history, "/keyboard")}
                   >
                     {" "}
                     Keyboard{" "}
@@ -83,16 +100,32 @@ class Header extends Component {
                   <NavLink
                     className="nav-link mr-5"
                     to="/mousepad"
-                    style={{ color: "white" }}
+                    style={isActive(this.props.history, "/mousepad")}
                   >
                     {" "}
                     Mouse Pad
                   </NavLink>
                 </NavItem>
+               
                 
                 <Nav className="ml-5" navbar>
-                {(details) ? <NavItem><Button outline onClick={this.handleLogout}>Logout</Button></NavItem>
-                : <> <NavItem>  <Signin/> </NavItem>
+                {(this.isAuthenticated()) && <>
+                  <NavItem>
+                  <NavLink
+                    className="nav-link mr-5"
+                    to="/cart"
+                    style={isActive(this.props.history, "/cart")}
+                  >
+                    {" "}
+                    Cart
+                  </NavLink>
+                </NavItem>
+                  <NavItem className="nav-link mr-5" style={{ color: "white" }} > {this.isAuthenticated().userExist.email} </NavItem>
+                <NavItem><Button outline onClick={this.handleLogout}>Logout</Button></NavItem>
+                
+                </>
+                 }
+                 {(!this.isAuthenticated()) && <> <NavItem>  <Signin/> </NavItem>
                 &nbsp; &nbsp;
                 <NavItem>  <Signup/> </NavItem> </>}
                 </Nav>
@@ -108,11 +141,13 @@ class Header extends Component {
 
 Header.propTypes = {
   user: PropTypes.object,
+  LoggedIn: PropTypes.bool
 }
 
 const mapStateToProps = (state) => ({
-  user: state.user.user
+  user: state.user.user,
+  LoggedIn : state.user.isloggedIn
 })
 
 
-export default connect(mapStateToProps, {logout})(Header);
+export default withRouter(connect(mapStateToProps, {logout})(Header));

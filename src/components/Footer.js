@@ -1,10 +1,12 @@
 import React from 'react';
+import "../App.css";
 
 function Footer(props) {
     return(
     <div>
-        <div className="container" style={{color:"white"}}>
-            <div className="row justify-content-center" style={{backgroundColor:"#3A3A39"}}>             
+        <div  className="container" style={{color:"white"}}>
+            <div className="footer" style={{backgroundColor:"#3A3A39"}}>
+            <div className=" row justify-content-center">             
                 <div className="col-2 mt-2">
                     <h6>Our Products</h6>
                     <div><ul className="list-unstyled">
@@ -45,14 +47,16 @@ function Footer(props) {
                     </ul>
                     </div>
                 </div>
+                
             </div>
-            <div className="row text-center" >             
+            <div className="row text-center mb-2" >             
                 <div className="col-12">
                     <p>© Copyright 2020 All Right Reserved</p>
-                </div>
             </div>
+            </div>
+            
         </div>
-        
+        </div>
     </div>
     )
 }

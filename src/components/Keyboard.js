@@ -3,7 +3,8 @@ import {connect} from "react-redux";
 import {getKeyboard} from "../redux/keyboardActions";
 import PropTypes from "prop-types"
 import { Jumbotron } from 'reactstrap';
-import Footer from "./Footer"
+import {addItem} from "./cartHelpers";
+
 import Loading from "./Loading";
 
 class Keyboard extends Component {
@@ -12,13 +13,13 @@ class Keyboard extends Component {
         this.props.getKeyboard();
     }
 
+
     render(){
         const {keyboard} = this.props.keyboard;
         return(
             <div>
                 <div className="container">
-                    <Jumbotron ><h1 className="text-center">Keyboards</h1></Jumbotron>
-                {(keyboard.length === 0) ? <Loading/> : <>
+                  {(keyboard.length === 0) ? <Loading/> : <>
                 <div className="row">
                 {keyboard.map((k,i) => {
                     return(
@@ -31,6 +32,8 @@ class Keyboard extends Component {
                         <p className="card-text" style={{color:"white"}}>Rs. {k.price}</p>
                         <img alt="ProductImage" src={`http://localhost:3001/static/img/${k.imageName}`} style={{height:"150px", width:"180px"}}></img>
                         <br/> <br/>
+                        
+                       
                         </div>
                       </div>
                     )
@@ -38,7 +41,7 @@ class Keyboard extends Component {
                 </div>
                 </>}
                 </div>
-                <Footer/> 
+                
             </div>
         )
     }

@@ -41,10 +41,11 @@ export const setItemsLoading = () => {
   };
 };
 
-export const deleteItem = (id) => (dispatch) => {
+export const deleteItem = (id, token) => (dispatch) => {
 
   return fetch(`http://localhost:3001/products/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
+        headers: {Authorization: `Bearer ${token}`}
     })
     .then(response => {
       if(response.ok) {

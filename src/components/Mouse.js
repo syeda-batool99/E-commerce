@@ -3,8 +3,8 @@ import {connect} from "react-redux";
 import {getMouse} from "../redux/mouseActions";
 import PropTypes from "prop-types"
 import { Jumbotron } from 'reactstrap';
-import Footer from "./Footer"
-import Loading from "./Loading"
+import Loading from "./Loading";
+import {addItem} from "./cartHelpers";
 
 class Mouse extends Component {
     
@@ -17,7 +17,6 @@ class Mouse extends Component {
         return(
             <div>
                 <div className="container">
-                <Jumbotron ><h1 className="text-center">Mouse</h1></Jumbotron>
                 {(mouse.length === 0) ? <Loading/> : <>
                 <div className="row">
                 {mouse.map((m,i) => {
@@ -31,6 +30,7 @@ class Mouse extends Component {
                         <p className="card-text" style={{color:"white"}}>Rs. {m.price}</p>
                         <img alt="ProductImage" src={`http://localhost:3001/static/img/${m.imageName}`} style={{height:"150px", width:"180px"}}></img>
                         <br/> <br/>
+                        
                         </div>
                       </div>
                     )
@@ -38,7 +38,7 @@ class Mouse extends Component {
                 </div>
                 </>}
                 </div>
-                <Footer/> 
+               
             </div>
         )
     }

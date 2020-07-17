@@ -18,7 +18,7 @@ export const register = (userData) => (dispatch) => {
       dispatch({
         type: SIGNUP_USER, 
         payload: user
-      });; dispatch(getUser(user)) }
+      }); localStorage.setItem('user', JSON.stringify(user.result)) }
     )
     .catch(err =>
       dispatch(returnErrors(err.message))
@@ -39,24 +39,17 @@ export const signin = (email, password) => (dispatch) => {
       dispatch({
         type: SIGNIN_USER, 
         payload: user
-      }); dispatch(getUser(user))}
+      }) ; localStorage.setItem('user', JSON.stringify(user.result))}
     )
   .catch(err =>
       dispatch(returnErrors(err.message))
     );
 };
 
-export const getUser = (details) => (dispatch) => {
-    dispatch({
-      type: GET_USER,
-      payload: details
-    })
-}
 
 export const logout = () => (dispatch) => {
 
   dispatch({
-    type: CLEAR_USER,
-    payload: null
-  })
+    type: CLEAR_USER
+  }) ; localStorage.removeItem('user')
 };

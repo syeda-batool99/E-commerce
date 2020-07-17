@@ -3,8 +3,8 @@ import {connect} from "react-redux";
 import {getMousepad} from "../redux/mousepadActions";
 import PropTypes from "prop-types"
 import { Jumbotron } from 'reactstrap';
-import Footer from "./Footer"
 import Loading from "./Loading"
+import {addItem} from "./cartHelpers";
 
 class Mousepad extends Component {
     
@@ -12,12 +12,13 @@ class Mousepad extends Component {
         this.props.getMousepad();
     }
 
+
+
     render(){
         const {mousepad} = this.props.mousepad;
         return(
             <div>
                 <div className="container">
-                <Jumbotron ><h1 className="text-center">Mouse Pads</h1></Jumbotron>
                 {(mousepad.length === 0) ? <Loading/> : <>
                 <div className="row">
                 {mousepad.map((m,i) => {
@@ -31,6 +32,8 @@ class Mousepad extends Component {
                         <p className="card-text" style={{color:"white"}}>Rs. {m.price}</p>
                         <img alt="ProductImage" src={`http://localhost:3001/static/img/${m.imageName}`} style={{height:"150px", width:"180px"}}></img>
                         <br/> <br/>
+                       
+                        
                         </div>
                       </div>
                     )
@@ -38,7 +41,7 @@ class Mousepad extends Component {
                 </div>
                 </>}
                 </div>
-                <Footer/> 
+               
             </div>
         )
     }
