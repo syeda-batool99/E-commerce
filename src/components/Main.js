@@ -11,6 +11,7 @@ import Footer from "./Footer"
 import { useSelector } from "react-redux";
 import Mousepad from "./Mousepad";
 import Cart from "./Cart";
+import PrivateRoute from "../PrivateRoute";
 
 
 
@@ -22,8 +23,6 @@ function Main() {
         <Header />
         <Switch >
           <Route exact path="/" component={Home} />
-          {/* <Route exact path="/signup" component={Signup}/> */}
-          <Route exact path="/signin" component={Signin}/>
           <Route exact path='/products' component={OurProducts}/>
           <Route exact path='/mouse' component={Mouse}/>
           <Route exact path='/keyboard' component={Keyboard}/>

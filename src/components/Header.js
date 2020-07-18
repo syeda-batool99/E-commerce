@@ -1,4 +1,4 @@
-import React, { Component  } from "react";
+import React, { Component } from "react";
 import {
   Collapse,
   Navbar,
@@ -7,53 +7,46 @@ import {
   Nav,
   NavItem,
   Container,
-  Button
+  Button,
 } from "reactstrap";
-import { NavLink, Redirect, withRouter} from "react-router-dom";
+import { NavLink, Redirect, withRouter } from "react-router-dom";
 import Logo from "../images/logo.png";
-import Signin from './Signin';
-import Signup from './Signup';
-import {logout} from "../redux/authActions";
-import PropTypes from "prop-types"
-import { connect } from 'react-redux';
+import Signin from "./Signin";
+import Signup from "./Signup";
+import { logout } from "../redux/authActions";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import {itemTotal} from "./cartHelpers";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
-      return { color: "aqua" };
+    return { color: "aqua" };
   } else {
-      return { color: "white" };
+    return { color: "white" };
   }
 };
 
 class Header extends Component {
-
-  constructor(props){
-    super(props)
-  this.state={
-    isOpen:false,
-    redirect: false
+  constructor(props) {
+    super(props);
+    this.state = {
+      isOpen: false,
+      redirect: false,
+    };
   }
-  }
-
-  isAuthenticated = () => {
-    if (localStorage.getItem('user')) {
-        return JSON.parse(localStorage.getItem('user'));
-    } else {
-        return null;
-    }
-};
 
   handleLogout = () => {
-    this.props.logout()
-  this.setState({redirect: true})
-}
-
-  toggle = () => {
-    this.setState({isOpen: !this.state.isOpen})
+    this.props.logout();
+    this.setState({ redirect: true });
   };
 
-  render(){
-    const details = this.props.user;
+  toggle = () => {
+    this.setState({ isOpen: !this.state.isOpen });
+  };
+
+ 
+
+  render() {
     return (
       <div>
         <Navbar expand="md">
@@ -63,7 +56,10 @@ class Header extends Component {
                 <img src={Logo} alt="" width="150" height="100" />
               </h1>
             </NavbarBrand>
-            <NavbarToggler onClick={this.toggle} style={{backgroundColor:"gray"}} />
+            <NavbarToggler
+              onClick={this.toggle}
+              style={{ backgroundColor: "gray" }}
+            />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav navbar>
                 <NavItem>
@@ -106,34 +102,55 @@ class Header extends Component {
                     Mouse Pad
                   </NavLink>
                 </NavItem>
-               
-                
-                <Nav className="ml-5" navbar>
-                {(this.isAuthenticated()) && <>
-                  <NavItem>
-                  <NavLink
-                    className="nav-link mr-5"
-                    to="/cart"
-                    style={isActive(this.props.history, "/cart")}
-                  >
+
+                {(this.props.LoggedIn) && (
+                  <>
+                    <NavItem>
+                      <NavLink
+                        className="nav-link mr-5"
+                        to="/cart"
+                        style={isActive(this.props.history, "/cart")}
+                      >
+                        {" "}
+                        Cart
+                        <sup>
+                        <medium className="cart-badge" style={{color:"aqua"}}>({itemTotal()})</medium>
+                    </sup>
+                      </NavLink>
+                    </NavItem>
+                    <NavItem
+                      className="nav-link mr-5"
+                      style={{ color: "white" }}
+                    >
+                      {" "}
+                      {this.props.user.email}{" "}
+                    </NavItem>
+                    <NavItem>
+                      <Button outline onClick={this.handleLogout}>
+                        Logout
+                      </Button>
+                    </NavItem>
+                  </>
+                )}
+                {(!this.props.LoggedIn) && (
+                  <>
                     {" "}
-                    Cart
-                  </NavLink>
-                </NavItem>
-                  <NavItem className="nav-link mr-5" style={{ color: "white" }} > {this.isAuthenticated().userExist.email} </NavItem>
-                <NavItem><Button outline onClick={this.handleLogout}>Logout</Button></NavItem>
-                
-                </>
-                 }
-                 {(!this.isAuthenticated()) && <> <NavItem>  <Signin/> </NavItem>
-                &nbsp; &nbsp;
-                <NavItem>  <Signup/> </NavItem> </>}
-                </Nav>
+                    <NavItem>
+                      {" "}
+                      <Signin />{" "}
+                    </NavItem>
+                    &nbsp; &nbsp;
+                    <NavItem>
+                      {" "}
+                      <Signup />{" "}
+                    </NavItem>{" "}
+                  </>
+                )}
               </Nav>
             </Collapse>
           </Container>
         </Navbar>
-        {(this.state.redirect) ? <Redirect to={"/"}/> : ""}
+        {this.state.redirect ? <Redirect to={"/"} /> : ""}
       </div>
     );
   }
@@ -141,13 +158,14 @@ class Header extends Component {
 
 Header.propTypes = {
   user: PropTypes.object,
-  LoggedIn: PropTypes.bool
-}
+  LoggedIn: PropTypes.bool,
+  token: PropTypes.string
+};
 
 const mapStateToProps = (state) => ({
   user: state.user.user,
-  LoggedIn : state.user.isloggedIn
-})
+  token: state.user.token,
+  LoggedIn: state.user.isloggedIn,
+});
 
-
-export default withRouter(connect(mapStateToProps, {logout})(Header));
+export default withRouter(connect(mapStateToProps, { logout })(Header));

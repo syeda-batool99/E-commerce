@@ -6,6 +6,7 @@ import AddProduct from './AddProduct';
 import { Container, Jumbotron } from 'reactstrap';
 import {addItem} from "./cartHelpers";
 import Loading from "./Loading"
+import { Redirect } from 'react-router-dom';
 
 class OurProducts extends Component {
     
@@ -21,8 +22,15 @@ class OurProducts extends Component {
         }
     };
 
-    onDeleteClick = (id, token) => {
-        this.props.deleteItem(id, token);
+    onDeleteClick = (id) => {
+        this.props.deleteItem(id, this.isAuthenticated().token);
+        this.redirect();
+    }
+
+    redirect = () => {
+        return (
+            <Redirect to={"/products"}/>
+        )
     }
 
     addToCart = (product) => {
@@ -34,7 +42,6 @@ class OurProducts extends Component {
     render(){
         const {products} = this.props.product;
         const details = this.props.user;
-        const token = this.isAuthenticated().token;
         return(
             <div>
                 <Container> 
@@ -55,7 +62,7 @@ class OurProducts extends Component {
                         <img alt="ProductImage" src={`http://localhost:3001/static/img/${p.imageName}`} style={{height:"150px", width:"180px"}}></img>
                         <br/> <br/>
                         <button className="btn btn-danger"
-                        onClick={this.onDeleteClick.bind(this, p._id, token )}>Delete</button>
+                        onClick={this.onDeleteClick.bind(this, p._id )}>Delete</button>
                         &nbsp; &nbsp;
                         <button onClick={this.addToCart.bind(this,p)} className="btn btn-primary mt-2 mb-2 ">  
                          Add to cart

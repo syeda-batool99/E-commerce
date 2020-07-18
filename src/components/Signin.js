@@ -7,7 +7,8 @@ import {
   Form,
   FormGroup,
   Label,
-  Input
+  Input,
+  Alert
 } from 'reactstrap';
 import {connect} from 'react-redux';
 import { signin } from '../redux/authActions';
@@ -21,6 +22,7 @@ class Signin extends Component {
    email:"",
    password:"",
    redirect: false,
+   errors: ""
  }
   
  toggle = () => {
@@ -38,9 +40,14 @@ onSubmit = (e) => {
   e.preventDefault();
   
   this.props.signin(this.state.email, this.state.password);
-  this.toggle();
+  
+  if(this.props.error){
+    this.setState({errors: this.props.error})
+  } else (
   this.setState({redirect: true})
-  console.log(this.state.email);
+  )
+  this.toggle();
+ 
 };
 
   render(){
@@ -49,8 +56,16 @@ onSubmit = (e) => {
       <Redirect to={"/products"}/>
       )
     }
+
+    if(this.state.errors){
+      return(
+      <Alert>{this.state.errors}</Alert>
+      )
+    }
+
       return (
     <div>
+      
       <Button  outline onClick={this.toggle}>
         Login
       </Button>
@@ -93,11 +108,13 @@ onSubmit = (e) => {
 
 Signin.propTypes = {
   signin: PropTypes.func.isRequired,
-  user: PropTypes.object.isRequired
+  user: PropTypes.object.isRequired,
+  error: PropTypes.string
 }
 
 const mapStateToProps = (state) => ({
   user: state.user,
+  error: state.user.error
 });
 
 export default connect(mapStateToProps, { signin })(Signin);

@@ -1,8 +1,10 @@
-import { SIGNIN_USER, SIGNUP_USER, CLEAR_USER, GET_USER } from './ActionTypes';
+import { SIGNIN_USER, SIGNUP_USER, CLEAR_USER, LOGIN_FAILED } from './ActionTypes';
   
   const initialState = {
     user: null,
-    isloggedIn: false
+    isloggedIn: false,
+    token: null,
+    error: null
   };
   
   
@@ -12,18 +14,23 @@ import { SIGNIN_USER, SIGNUP_USER, CLEAR_USER, GET_USER } from './ActionTypes';
         return {
           ...state,
           user: action.payload.result.userExist,
-          isloggedIn: true
+          token: action.payload.result.token,
+          isloggedIn: true,
+          error: null
         };
       case SIGNIN_USER:
         return {
           ...state,
           user: action.payload.result.userExist,
+          token: action.payload.result.token,
           isloggedIn: true
         };
     case CLEAR_USER:
         return {
           ...state,
-          isloggedIn: false
+          user: null,
+          isloggedIn: false,
+          token: null
         };
       default:
         return state;

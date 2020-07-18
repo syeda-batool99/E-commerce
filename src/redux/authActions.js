@@ -6,8 +6,7 @@ import { returnErrors } from './errorActions';
 export const register = (userData) => (dispatch) => {
 
   const newUser = JSON.stringify(userData);
-  console.log("THISSS" + newUser)
-
+  
   return fetch(`http://localhost:3001/auth/signup`, {
         method: "POST",
         body: newUser,
@@ -18,7 +17,7 @@ export const register = (userData) => (dispatch) => {
       dispatch({
         type: SIGNUP_USER, 
         payload: user
-      }); localStorage.setItem('user', JSON.stringify(user.result)) }
+      }) }
     )
     .catch(err =>
       dispatch(returnErrors(err.message))
@@ -28,21 +27,26 @@ export const register = (userData) => (dispatch) => {
 export const signin = (email, password) => (dispatch) => {
 
   const user= {email, password}
-  console.log("HELLO" + email + password)
-  return fetch(`http://localhost:3001/auth/login`, {
+ 
+  return  fetch(`http://localhost:3001/auth/login`, {
         method: "POST",
         body: JSON.stringify(user),
         headers : {"Content-Type": "application/json"}
     })
-  .then(response => response.json())
+  .then((response) => {
+    console.log("then 1") 
+    response.json()})
   .then(user => {
       dispatch({
         type: SIGNIN_USER, 
         payload: user
-      }) ; localStorage.setItem('user', JSON.stringify(user.result))}
+      })
+      console.log("THEN 2")
+   }
     )
-  .catch(err =>
-      dispatch(returnErrors(err.message))
+  .catch((err) =>{
+  console.log("CATCH")
+      dispatch(returnErrors(err.message))}
     );
 };
 
@@ -51,5 +55,5 @@ export const logout = () => (dispatch) => {
 
   dispatch({
     type: CLEAR_USER
-  }) ; localStorage.removeItem('user')
+  })
 };
