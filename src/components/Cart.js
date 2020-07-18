@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Redirect} from 'react-router-dom';
 // import Checkout from "./Checkout";
-import {getCart, itemTotal, removeItem} from "./cartHelpers";
+import {getCart, removeItem} from "./cartHelpers";
+import { Link } from 'react-router-dom';
 
 class Cart extends Component {
 
@@ -28,8 +28,9 @@ class Cart extends Component {
         return (
             <div >
                 {
-                    items.length === 1 ?
-                    <h2 style={{color:"white"}}>Your cart has {`${items.length}`} item</h2> :
+                    items.length === 1 &&
+                <h2 style={{color:"white"}}>Your cart has {`${items.length}`} item</h2> }
+                { items.length > 1 &&
                     <h2 style={{color:"white"}}>Your cart has {`${items.length}`} items</h2>
                 }
                 {
@@ -73,9 +74,15 @@ class Cart extends Component {
                         
             <div className="row">
                 <div className="col-md-7 offset-3">
-                <button  className="btn btn-success btn-block mb-5">
+                    {this.state.items.length ? <button  className="btn btn-success btn-block mb-5">
                         Place order
                     </button>
+                    : 
+                    <Link to={"/products"}  className="btn btn-primary btn-block mb-5">
+                    Go to Shop
+                </Link>
+                }
+                
                 </div>
             </div>
             </div>

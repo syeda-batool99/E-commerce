@@ -3,10 +3,12 @@ import {connect} from "react-redux";
 import {getItems, deleteItem} from "../redux/productActions";
 import PropTypes from "prop-types"
 import AddProduct from './AddProduct';
-import { Container, Jumbotron } from 'reactstrap';
+import { Container,Button } from 'reactstrap';
 import {addItem} from "./cartHelpers";
 import Loading from "./Loading"
 import { Redirect } from 'react-router-dom';
+import Cart from "../images/cart.png";
+import Wish from "../images/wish.png";
 
 class OurProducts extends Component {
     
@@ -41,7 +43,6 @@ class OurProducts extends Component {
     
     render(){
         const {products} = this.props.product;
-        const details = this.props.user;
         return(
             <div>
                 <Container> 
@@ -61,12 +62,16 @@ class OurProducts extends Component {
                         <p className="card-text" style={{color:"white"}}>Rs. {p.price}</p>
                         <img alt="ProductImage" src={`http://localhost:3001/static/img/${p.imageName}`} style={{height:"150px", width:"180px"}}></img>
                         <br/> <br/>
-                        <button className="btn btn-danger"
-                        onClick={this.onDeleteClick.bind(this, p._id )}>Delete</button>
-                        &nbsp; &nbsp;
-                        <button onClick={this.addToCart.bind(this,p)} className="btn btn-primary mt-2 mb-2 ">  
-                         Add to cart
-                        </button>
+                        <Button style={{backgroundColor:"red", height:"44px"}}
+                        onClick={this.onDeleteClick.bind(this, p._id )}>Delete</Button>
+                        &nbsp;
+                        <Button outline onClick={this.addToCart.bind(this,p)}>  
+                        <img src={Cart} alt="cart" width="40px" height="30px"/>
+                        </Button>
+                        &nbsp;
+                        <Button outline style={{backgroundColor:"red", height:"44px"}} onClick={this.addToCart.bind(this,p)}>  
+                        <img src={Wish} alt="cart" width="40px" height="40px"/>
+                        </Button>
                         </div>
                       </div>
                     )

@@ -1,4 +1,4 @@
-import { SIGNIN_USER, SIGNUP_USER, CLEAR_USER, LOGIN_FAILED } from './ActionTypes';
+import { SIGNIN_USER, SIGNUP_USER, CLEAR_USER } from './ActionTypes';
   
   const initialState = {
     user: null,

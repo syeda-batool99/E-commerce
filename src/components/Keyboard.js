@@ -2,9 +2,6 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {getKeyboard} from "../redux/keyboardActions";
 import PropTypes from "prop-types"
-import { Jumbotron } from 'reactstrap';
-import {addItem} from "./cartHelpers";
-
 import Loading from "./Loading";
 
 class Keyboard extends Component {

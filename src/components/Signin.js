@@ -7,11 +7,11 @@ import {
   Form,
   FormGroup,
   Label,
-  Input,
-  Alert
+  Input
 } from 'reactstrap';
 import {connect} from 'react-redux';
 import { signin } from '../redux/authActions';
+import { clearErrors } from '../redux/errorActions';
 import { Redirect } from 'react-router-dom';
 import PropTypes from "prop-types"
 
@@ -32,22 +32,17 @@ class Signin extends Component {
 };
 
 onChange = (name) => (e) => {
-  const value = name === "image" ? e.target.files[0] : e.target.value;
-  this.setState({ [name]: value });
+  this.setState({ errors: "" });
+  this.setState({ [name]: e.target.value });
+  {this.props.clearErrors()}
 };
 
 onSubmit = (e) => {
-  e.preventDefault();
   
+  e.preventDefault();
+
   this.props.signin(this.state.email, this.state.password);
   
-  if(this.props.error){
-    this.setState({errors: this.props.error})
-  } else (
-  this.setState({redirect: true})
-  )
-  this.toggle();
- 
 };
 
   render(){
@@ -57,24 +52,28 @@ onSubmit = (e) => {
       )
     }
 
-    if(this.state.errors){
-      return(
-      <Alert>{this.state.errors}</Alert>
-      )
-    }
-
       return (
+       
     <div>
-      
+     
       <Button  outline onClick={this.toggle}>
         Login
       </Button>
 
       <Modal isOpen={this.state.modal} toggle={this.toggle}>
         <ModalHeader toggle={this.toggle}>Login</ModalHeader>
+
+        <div
+          className="alert alert-info"
+          style={{ display: this.props.error ? "" : "none" }}
+        >
+          {this.props.error}
+        </div>
+
         <ModalBody>
           <Form onSubmit={this.onSubmit}>
             <FormGroup>
+              
               <Label for="email">Email</Label>
               <Input
                 type="email"
@@ -109,13 +108,14 @@ onSubmit = (e) => {
 Signin.propTypes = {
   signin: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  error: PropTypes.string
+  error: PropTypes.string,
+  clearErros: PropTypes.func
 }
 
 const mapStateToProps = (state) => ({
   user: state.user,
-  error: state.user.error
+  error: state.error.msg
 });
 
-export default connect(mapStateToProps, { signin })(Signin);
+export default connect(mapStateToProps, { signin, clearErrors })(Signin);
 

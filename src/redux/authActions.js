@@ -1,7 +1,8 @@
 
-import { SIGNIN_USER, SIGNUP_USER, CLEAR_USER, GET_USER } from './ActionTypes';
+import { SIGNIN_USER, SIGNUP_USER, CLEAR_USER, GET_ERRORS, CLEAR_ERRORS } from './ActionTypes';
 // import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
+
 
 export const register = (userData) => (dispatch) => {
 
@@ -14,14 +15,20 @@ export const register = (userData) => (dispatch) => {
     })
   .then(response => response.json())
     .then(user => {
-      dispatch({
-        type: SIGNUP_USER, 
-        payload: user
-      }) }
+      if(user.result.usererror){
+        dispatch({
+          type: GET_ERRORS,
+          payload: user.result.usererror})}
+      else {
+        dispatch({
+          type: SIGNUP_USER, 
+          payload: user
+        })
+        dispatch({
+          type: CLEAR_ERRORS})
+      }
+   }
     )
-    .catch(err =>
-      dispatch(returnErrors(err.message))
-    );
 };
 
 export const signin = (email, password) => (dispatch) => {
@@ -33,21 +40,25 @@ export const signin = (email, password) => (dispatch) => {
         body: JSON.stringify(user),
         headers : {"Content-Type": "application/json"}
     })
-  .then((response) => {
-    console.log("then 1") 
-    response.json()})
+  .then(response => response.json())
   .then(user => {
+    if(user.result.emailerror){
+      dispatch({
+        type: GET_ERRORS,
+        payload: user.result.emailerror})}
+    else if(user.result.passworderror){
+      dispatch({
+        type: GET_ERRORS,
+        payload: user.result.passworderror})
+    }
+    else {
       dispatch({
         type: SIGNIN_USER, 
         payload: user
       })
-      console.log("THEN 2")
+    }
    }
     )
-  .catch((err) =>{
-  console.log("CATCH")
-      dispatch(returnErrors(err.message))}
-    );
 };
 
 

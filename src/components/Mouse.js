@@ -2,9 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {getMouse} from "../redux/mouseActions";
 import PropTypes from "prop-types"
-import { Jumbotron } from 'reactstrap';
 import Loading from "./Loading";
-import {addItem} from "./cartHelpers";
 
 class Mouse extends Component {
     

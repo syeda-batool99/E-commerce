@@ -17,6 +17,7 @@ import { logout } from "../redux/authActions";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import {itemTotal} from "./cartHelpers";
+import Cart from "../images/cart.png";
 
 const isActive = (history, path) => {
   if (history.location.pathname === path) {
@@ -64,7 +65,7 @@ class Header extends Component {
               <Nav navbar>
                 <NavItem>
                   <NavLink
-                    className="nav-link  mr-5"
+                    className="nav-link mr-3"
                     to="/products"
                     style={isActive(this.props.history, "/products")}
                   >
@@ -74,7 +75,7 @@ class Header extends Component {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className="nav-link mr-5"
+                    className="nav-link mr-3"
                     to="/mouse"
                     style={isActive(this.props.history, "/mouse")}
                   >
@@ -84,7 +85,7 @@ class Header extends Component {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className="nav-link mr-5"
+                    className="nav-link mr-3"
                     to="/keyboard"
                     style={isActive(this.props.history, "/keyboard")}
                   >
@@ -94,7 +95,7 @@ class Header extends Component {
                 </NavItem>
                 <NavItem>
                   <NavLink
-                    className="nav-link mr-5"
+                    className="nav-link mr-3"
                     to="/mousepad"
                     style={isActive(this.props.history, "/mousepad")}
                   >
@@ -102,52 +103,55 @@ class Header extends Component {
                     Mouse Pad
                   </NavLink>
                 </NavItem>
+               
 
                 {(this.props.LoggedIn) && (
                   <>
-                    <NavItem>
-                      <NavLink
-                        className="nav-link mr-5"
-                        to="/cart"
-                        style={isActive(this.props.history, "/cart")}
-                      >
-                        {" "}
-                        Cart
-                        <sup>
-                        <medium className="cart-badge" style={{color:"aqua"}}>({itemTotal()})</medium>
-                    </sup>
-                      </NavLink>
-                    </NavItem>
+                    
                     <NavItem
-                      className="nav-link mr-5"
+                      className="nav-link mr-3"
                       style={{ color: "white" }}
                     >
                       {" "}
                       {this.props.user.email}{" "}
                     </NavItem>
-                    <NavItem>
+                    <NavItem className="nav-link">
                       <Button outline onClick={this.handleLogout}>
                         Logout
                       </Button>
                     </NavItem>
                   </>
                 )}
-                {(!this.props.LoggedIn) && (
+               
+                
+              </Nav>
+            </Collapse>
+            {(!this.props.LoggedIn) && (
                   <>
                     {" "}
-                    <NavItem>
+                    <NavItem className="nav-link ">
                       {" "}
                       <Signin />{" "}
                     </NavItem>
-                    &nbsp; &nbsp;
-                    <NavItem>
+                    <NavItem className="nav-link ">
                       {" "}
                       <Signup />{" "}
                     </NavItem>{" "}
                   </>
                 )}
-              </Nav>
-            </Collapse>
+            <NavItem>
+                      <NavLink
+                        className="nav-link mr-3"
+                        to="/cart"
+                        style={isActive(this.props.history, "/cart")}
+                      >
+                        
+                        <img src={Cart} alt="cart" width="60px" height="40px"/>
+                        <sup>
+                        <small className="cart-badge" style={{color:"aqua"}}>({itemTotal()})</small>
+                    </sup>
+                      </NavLink>
+                    </NavItem>
           </Container>
         </Navbar>
         {this.state.redirect ? <Redirect to={"/"} /> : ""}

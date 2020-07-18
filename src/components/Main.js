@@ -1,14 +1,11 @@
-import React, { Component } from "react";
+import React from "react";
 import { Switch, Route,  withRouter, BrowserRouter } from "react-router-dom";
 import Home from "./Home";
 import Header from "./Header";
-import Signin from "./Signin";
-import Signup from "./Signup";
 import OurProducts from "./OurProducts";
 import Mouse from "./Mouse";
 import Keyboard from "./Keyboard";
 import Footer from "./Footer"
-import { useSelector } from "react-redux";
 import Mousepad from "./Mousepad";
 import Cart from "./Cart";
 import PrivateRoute from "../PrivateRoute";
