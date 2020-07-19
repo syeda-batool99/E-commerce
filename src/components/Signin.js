@@ -108,13 +108,15 @@ onSubmit = (e) => {
 Signin.propTypes = {
   signin: PropTypes.func.isRequired,
   user: PropTypes.object.isRequired,
-  error: PropTypes.string,
+  erroremail: PropTypes.string,
+  errorpassword: PropTypes.string,
   clearErros: PropTypes.func
 }
 
 const mapStateToProps = (state) => ({
   user: state.user,
-  error: state.error.msg
+  erroremaill: state.error.emailerror,
+  errorpassword: state.error.passworderror
 });
 
 export default connect(mapStateToProps, { signin, clearErrors })(Signin);

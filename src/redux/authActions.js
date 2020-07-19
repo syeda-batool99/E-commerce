@@ -1,5 +1,5 @@
 
-import { SIGNIN_USER, SIGNUP_USER, CLEAR_USER, GET_ERRORS, CLEAR_ERRORS } from './ActionTypes';
+import { SIGNIN_USER, SIGNUP_USER, CLEAR_USER, GET_ERRORS, CLEAR_ERRORS, GET_EMAIL_ERRORS, GET_PASSWORD_ERRORS } from './ActionTypes';
 // import { tokenConfig } from './authActions';
 import { returnErrors } from './errorActions';
 
@@ -44,11 +44,11 @@ export const signin = (email, password) => (dispatch) => {
   .then(user => {
     if(user.result.emailerror){
       dispatch({
-        type: GET_ERRORS,
+        type: GET_EMAIL_ERRORS,
         payload: user.result.emailerror})}
     else if(user.result.passworderror){
       dispatch({
-        type: GET_ERRORS,
+        type: GET_PASSWORD_ERRORS,
         payload: user.result.passworderror})
     }
     else {

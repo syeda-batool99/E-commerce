@@ -62,17 +62,18 @@ class OurProducts extends Component {
                         <p className="card-text" style={{color:"white"}}>Rs. {p.price}</p>
                         <img alt="ProductImage" src={`http://localhost:3001/static/img/${p.imageName}`} style={{height:"150px", width:"180px"}}></img>
                         <br/> <br/>
-                        <Button style={{backgroundColor:"red", height:"44px"}}
+                        {console.log("USER" + this.props.user + "ADMIN" + this.props.isAdmin )}
+                        {this.props.user && this.props.isAdmin ?  <Button style={{backgroundColor:"red", height:"44px"}}
                         onClick={this.onDeleteClick.bind(this, p._id )}>Delete</Button>
-                        &nbsp;
-                        <Button outline onClick={this.addToCart.bind(this,p)}>  
+                         : <> <Button outline onClick={this.addToCart.bind(this,p)}>  
                         <img src={Cart} alt="cart" width="40px" height="30px"/>
                         </Button>
-                        &nbsp;
-                        <Button outline style={{backgroundColor:"red", height:"44px"}} onClick={this.addToCart.bind(this,p)}>  
-                        <img src={Wish} alt="cart" width="40px" height="40px"/>
-                        </Button>
-                        </div>
+                        &nbsp; &nbsp;
+                        <Button outline style={{backgroundColor:"aqua"}} >  
+                        <img src={Wish} alt="cart" width="30px" height="30px"/>
+                        </Button> </>
+                         }
+                       </div>
                       </div>
                     )
                 })}
@@ -88,12 +89,14 @@ class OurProducts extends Component {
 OurProducts.propTypes = {
     getItems: PropTypes.func.isRequired,
     product: PropTypes.object.isRequired,
-    user: PropTypes.object
+    user: PropTypes.object,
+    isAdmin: PropTypes.bool
 }
 
 const mapStateToProps = (state) => ({
     product: state.product,
-    user: state.user.user
+    user: state.user.user,
+    isAdmin: state.user.role
 })
 
 export default connect(mapStateToProps, {getItems, deleteItem})(OurProducts);
